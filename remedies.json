@@ -1,0 +1,23 @@
+{
+  "Flu": "Rest at home, stay hydrated, take paracetamol for fever. Consult a doctor if symptoms persist beyond 3 days.",
+  "COVID-19": "Isolate, monitor oxygen levels, stay hydrated, take paracetamol for fever. Seek medical attention if breathing difficulty occurs.",
+  "Pneumonia": "Antibiotics if bacterial, rest, fluids, and fever reducers. Hospitalization may be required for severe cases.",
+  "Asthma": "Use prescribed inhaler, avoid triggers, seek emergency care if severe shortness of breath.",
+  "Diabetes": "Monitor blood sugar, take prescribed medication, maintain healthy diet and exercise.",
+  "Hypertension": "Take antihypertensive medication, reduce salt intake, regular exercise, monitor blood pressure.",
+  "Chickenpox": "Rest, calamine lotion for itching, keep skin clean, avoid scratching blisters.",
+  "Malaria": "Take antimalarial drugs as prescribed, rest, stay hydrated, seek medical care for complications.",
+  "Typhoid": "Antibiotics, rest, drink plenty of fluids, eat soft foods, maintain hygiene.",
+  "Tuberculosis": "Long-term antibiotics, regular follow-up, good nutrition, avoid spreading infection.",
+  "Food Poisoning": "Drink fluids, rest, avoid solid foods until vomiting stops, seek medical care if severe.",
+  "Allergy": "Avoid allergens, take antihistamines, use nasal sprays for congestion, consult doctor for severe reactions.",
+  "Migraine": "Lie down in a dark room, apply cold compress to forehead, take ibuprofen. Avoid triggers like bright lights.",
+  "Sinusitis": "Steam inhalation, saline nasal spray, pain relievers, antibiotics if bacterial.",
+  "Otitis Media": "Pain relievers, warm compress, antibiotics if bacterial, consult doctor for persistent symptoms.",
+  "Conjunctivitis": "Use lubricating eye drops, avoid touching eyes, antibiotics if bacterial, maintain eye hygiene.",
+  "Psoriasis": "Moisturize skin, use medicated creams, avoid triggers, consult dermatologist for severe cases.",
+  "Guillain-Barre Syndrome": "Hospitalization, supportive care, physical therapy, immunotherapy as prescribed.",
+  "Jaundice": "Treat underlying cause, rest, avoid alcohol, maintain hydration, consult doctor for persistent symptoms.",
+  "Fungal Infection": "Use antifungal creams or medications, keep affected area dry, maintain hygiene.",
+  "Common Cold": "Gargle salt water for sore throat, use over-the-counter decongestants, rest and drink fluids."
+}

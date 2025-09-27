@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CureCast | Disease Prediction & Remedy Recommendation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e6f2ff 0%, #f7fbff 100%);
+      color: #2d3748;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1400px;   
+        margin: 0 auto;      
+        padding: 0 40px;     
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 2.4rem;
+      color: #2c5282;
+    }
+
+    .logo-text {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #2c5282;
+    }
+
+    /* Flowchart Steps Section */
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 40px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .step-card {
+      flex: 1;
+      min-width: 200px;
+      background: #ffffff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      position: relative;
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+      border-color: #3182ce;
+    }
+
+    .step-card i {
+      font-size: 2rem;
+      color: #3182ce;
+      margin-bottom: 10px;
+    }
+
+    .step-card h4 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: #2c5282;
+    }
+
+    .step-card p {
+      font-size: 0.95rem;
+      color: #4a5568;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(145deg, #ffffff, #f0f8ff);
+      padding: 60px 40px;
+      border-radius: 14px;
+      margin-bottom: 50px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: rgba(49, 130, 206, 0.15);
+      border-radius: 50%;
+      top: -80px;
+      right: -80px;
+      filter: blur(60px);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(72, 187, 120, 0.15);
+      border-radius: 50%;
+      bottom: -60px;
+      left: -60px;
+      filter: blur(60px);
+    }
+
+    .hero h1 {
+      font-size: 2.7rem;
+      margin-bottom: 20px;
+      color: #2c5282;
+      position: relative;
+      font-weight: 700;
+    }
+
+    .hero h1::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -12px;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 4px;
+      background: #3182ce;
+      border-radius: 2px;
+    }
+
+    .tagline {
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #4a5568;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: #4a5568;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Input Section */
+    .input-section {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 40px;
+    }
+
+    .input-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      color: #2c5282;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      padding: 16px;
+      font-size: 1rem;
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      color: #2d3748;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.15);
+      background: #ffffff;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 200px;
+      padding: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #3182ce, #2c5282);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px auto 0 auto;
+      box-shadow: 0 3px 6px rgba(49, 130, 206, 0.25);
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #2b6cb0, #2c5282);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(49, 130, 206, 0.35);
+    }
+
+    /* Results */
+    .result-section {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 50px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .result-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .prediction-card {
+      background: #f7fafc;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #3182ce;
+    }
+
+    .disease-name {
+      font-size: 1.5rem;
+      color: #2c5282;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .confidence {
+      font-size: 0.95rem;
+      color: #4a5568;
+      margin-bottom: 20px;
+    }
+
+    .remedy-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .remedy-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .remedy-list li:last-child {
+      border-bottom: none;
+    }
+
+    .remedy-list i {
+      color: #48bb78;
+      font-size: 1.1rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 60px;
+    }
+
+    .feature-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border-color: #3182ce;
+    }
+
+    .feature-card i {
+      font-size: 2.5rem;
+      color: #3182ce;
+      margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: #2c5282;
+    }
+
+    .feature-card p {
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      margin-top: 60px;
+      border-top: 1px solid #e2e8f0;
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #3182ce;
+      font-style: italic;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 12px; }
+      .hero { padding: 30px 20px; }
+      .hero h1 { font-size: 2rem; }
+      .features { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">
+      <i class="fas fa-stethoscope logo-icon"></i>
+      <h1 class="logo-text">CureCast</h1>
+    </div>
+  </header>
+
+  <!-- Steps / Flowchart -->
+  <section class="steps">
+    <div class="step-card">
+      <i class="fas fa-pencil-alt"></i>
+      <h4>Step 1</h4>
+      <p>Describe your symptoms clearly in the input box.</p>
+    </div>
+    <div class="step-card">
+      <i class="fas fa-microscope"></i>
+      <h4>Step 2</h4>
+      <p>AI analyzes your symptoms using medical datasets.</p>
+    </div>
+    <div class="step-card">
+      <i class="fas fa-notes-medical"></i>
+      <h4>Step 3</h4>
+      <p>Receive predicted conditions with confidence levels.</p>
+    </div>
+    <div class="step-card">
+      <i class="fas fa-heartbeat"></i>
+      <h4>Step 4</h4>
+      <p>Explore practical remedy suggestions for support.</p>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Disease Prediction & Remedy Recommendation</h1>
+    <p class="tagline">AI-Powered Health Insights at Your Fingertips</p>
+    <p>Enter your symptoms below to receive an intelligent prediction of possible conditions and suggested remedies. 
+      <br><strong>Note:</strong> This tool is for informational purposes only. Always consult a licensed healthcare professional.</p>
+  </section>
+
+  <!-- Input Section -->
+  <section class="input-section">
+    <h2><i class="fas fa-edit"></i> Describe Your Symptoms</h2>
+    <div class="input-container">
+      <textarea id="symptoms-input" placeholder="Example: I have a fever, cough, fatigue, and sore throat for the past two days."></textarea>
+    </div>
+    <button class="submit-btn" id="analyze-btn"><i class="fas fa-search"></i> Analyze Symptoms</button>
+    <div class="loading" id="loading">Analyzing your symptoms...</div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="result-section" id="result-section">
+    <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+    <div class="prediction-card">
+      <h3 class="disease-name">Predicted Condition: <span id="disease-name">Loading...</span></h3>
+      <p class="confidence" id="confidence">Confidence level: Calculating...</p>
+      <p>Based on the symptoms you described, our system suggests the following possible condition. Here are remedy recommendations:</p>
+      <ul class="remedy-list" id="remedy-list"></ul>
+    </div>
+    <div class="disclaimer">
+      <p><strong>Important Disclaimer:</strong> This is not a medical diagnosis. Predictions are based on simplified machine learning models and datasets. Consult a healthcare professional for accurate treatment.</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <i class="fas fa-brain"></i>
+      <h3>AI-Driven Predictions</h3>
+      <p>Utilizes machine learning trained on medical symptoms to provide condition insights.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-shield-alt"></i>
+      <h3>Privacy First</h3>
+      <p>Your data is processed locally. No storage or sharing of sensitive information.</p>
+    </div>
+    <div class="feature-card">
+      <i class="fas fa-leaf"></i>
+      <h3>Practical Remedies</h3>
+      <p>Offers simple, non-prescriptive remedies aligned with medical guidelines.</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 CureCast | AI for Health Awareness. All rights reserved.</p>
+  </footer>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const symptomsInput = document.getElementById('symptoms-input');
+    const resultSection = document.getElementById('result-section');
+    const diseaseName = document.getElementById('disease-name');
+    const confidence = document.getElementById('confidence');
+    const remedyList = document.getElementById('remedy-list');
+    const loading = document.getElementById('loading');
+
+    // Mock conditions data
+    const conditions = {
+      flu: {
+        name: "Influenza (Flu)",
+        confidence: "85%",
+        remedies: [
+          "Rest in bed and stay hydrated.",
+          "Take fever reducers (e.g., acetaminophen).",
+          "Use a humidifier or steam inhalation.",
+          "Avoid close contact with others."
+        ]
+      },
+      cold: {
+        name: "Common Cold",
+        confidence: "75%",
+        remedies: [
+          "Drink plenty of fluids.",
+          "Rest and avoid strenuous activity.",
+          "Use saline nasal drops.",
+          "Gargle with warm salt water."
+        ]
+      },
+      covid: {
+        name: "COVID-19",
+        confidence: "65%",
+        remedies: [
+          "Isolate and monitor symptoms.",
+          "Consult a healthcare provider.",
+          "Stay hydrated and rest.",
+          "Follow local health guidelines."
+        ]
+      }
+    };
+
+    function predictCondition(symptoms) {
+      // Simple keyword matching for demo purposes
+      const text = symptoms.toLowerCase();
+      if (text.includes("fever") && text.includes("cough") && text.includes("fatigue")) {
+        return conditions.flu;
+      } else if (text.includes("sore throat") || text.includes("runny nose")) {
+        return conditions.cold;
+      } else if (text.includes("loss of taste") || text.includes("loss of smell") || text.includes("covid")) {
+        return conditions.covid;
+      } else {
+        return {
+          name: "Unknown Condition",
+          confidence: "N/A",
+          remedies: ["Please provide more specific symptoms or consult a healthcare professional."]
+        };
+      }
+    }
+
+    analyzeBtn.addEventListener('click', function() {
+      const symptoms = symptomsInput.value.trim();
+      if (!symptoms) {
+        alert("Please describe your symptoms.");
+        return;
+      }
+      loading.style.display = 'block';
+      resultSection.classList.remove('visible');
+      setTimeout(function() {
+        const prediction = predictCondition(symptoms);
+        diseaseName.textContent = prediction.name;
+        confidence.textContent = `Confidence level: ${prediction.confidence}`;
+        remedyList.innerHTML = '';
+        prediction.remedies.forEach(remedy => {
+          const li = document.createElement('li');
+          li.innerHTML = `<i class='fas fa-check-circle'></i> ${remedy}`;
+          remedyList.appendChild(li);
+        });
+        loading.style.display = 'none';
+        resultSection.classList.add('visible');
+      }, 1200);
+    });
+  });
+</script>
