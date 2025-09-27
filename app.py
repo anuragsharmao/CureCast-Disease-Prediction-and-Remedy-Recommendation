@@ -7,6 +7,13 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import os
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend requests
@@ -113,4 +120,5 @@ def get_remedies():
     })
 
 if __name__ == '__main__':
+
     app.run(debug=True)
