@@ -57,14 +57,16 @@ def preprocess_and_extract(symptoms_text):
     text = re.sub(r'[^\w\s]', '', symptoms_text.lower().strip())
     words = [w for w in text.split() if w not in STOPWORDS and len(w) > 2]
     
-    # Binary vector: 1 if symptom in words
+    # Flexible matching: partial and synonym (basic)
     vector = np.zeros(len(symptom_list))
     matched = []
     for i, symptom in enumerate(symptom_list):
-        if symptom.lower() in words:
-            vector[i] = 1
-            matched.append(symptom)
-    
+        for word in words:
+            # Partial match (substring) and ignore case
+            if symptom.lower() in word or word in symptom.lower():
+                vector[i] = 1
+                matched.append(symptom)
+                break
     return vector, matched
 
 # Train on startup
@@ -89,7 +91,10 @@ def predict():
     vector, matched = preprocess_and_extract(symptoms_text)
     prediction_encoded = model.predict(vector.reshape(1, -1))[0]
     disease = label_encoder.inverse_transform([prediction_encoded])[0]
-    
+    print(f"Input symptoms: {symptoms_text}")
+    print(f"Matched symptoms: {matched}")
+    print(f"Predicted disease: {disease}")
+    print(f"Prediction confidence: {float(model.predict_proba(vector.reshape(1, -1)).max())}")
     return jsonify({
         'disease': disease,
         'matched_symptoms': matched,
