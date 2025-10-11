@@ -459,58 +459,6 @@
     const remedyList = document.getElementById('remedy-list');
     const loading = document.getElementById('loading');
 
-    // Mock conditions data
-    const conditions = {
-      flu: {
-        name: "Influenza (Flu)",
-        confidence: "85%",
-        remedies: [
-          "Rest in bed and stay hydrated.",
-          "Take fever reducers (e.g., acetaminophen).",
-          "Use a humidifier or steam inhalation.",
-          "Avoid close contact with others."
-        ]
-      },
-      cold: {
-        name: "Common Cold",
-        confidence: "75%",
-        remedies: [
-          "Drink plenty of fluids.",
-          "Rest and avoid strenuous activity.",
-          "Use saline nasal drops.",
-          "Gargle with warm salt water."
-        ]
-      },
-      covid: {
-        name: "COVID-19",
-        confidence: "65%",
-        remedies: [
-          "Isolate and monitor symptoms.",
-          "Consult a healthcare provider.",
-          "Stay hydrated and rest.",
-          "Follow local health guidelines."
-        ]
-      }
-    };
-
-    function predictCondition(symptoms) {
-      // Simple keyword matching for demo purposes
-      const text = symptoms.toLowerCase();
-      if (text.includes("fever") && text.includes("cough") && text.includes("fatigue")) {
-        return conditions.flu;
-      } else if (text.includes("sore throat") || text.includes("runny nose")) {
-        return conditions.cold;
-      } else if (text.includes("loss of taste") || text.includes("loss of smell") || text.includes("covid")) {
-        return conditions.covid;
-      } else {
-        return {
-          name: "Unknown Condition",
-          confidence: "N/A",
-          remedies: ["Please provide more specific symptoms or consult a healthcare professional."]
-        };
-      }
-    }
-
     analyzeBtn.addEventListener('click', function() {
       const symptoms = symptomsInput.value.trim();
       if (!symptoms) {
@@ -519,19 +467,60 @@
       }
       loading.style.display = 'block';
       resultSection.classList.remove('visible');
-      setTimeout(function() {
-        const prediction = predictCondition(symptoms);
-        diseaseName.textContent = prediction.name;
-        confidence.textContent = `Confidence level: ${prediction.confidence}`;
+
+      // Send symptoms to backend for prediction
+      fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ symptoms })
+      })
+      .then(response => response.json())
+      .then(data => {
+        diseaseName.textContent = data.disease || "Unknown Condition";
+        confidence.textContent = `Confidence level: ${data.confidence ? (data.confidence * 100).toFixed(1) + '%' : 'N/A'}`;
         remedyList.innerHTML = '';
-        prediction.remedies.forEach(remedy => {
+        // Fetch remedies from backend
+        fetch('http://localhost:5000/remedies', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ disease: data.disease })
+        })
+        .then(resp => resp.json())
+        .then(remedyData => {
+          if (remedyData.remedy) {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class='fas fa-check-circle'></i> ${remedyData.remedy}`;
+            remedyList.appendChild(li);
+          } else {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class='fas fa-exclamation-circle'></i> No remedy found.`;
+            remedyList.appendChild(li);
+          }
+          loading.style.display = 'none';
+          resultSection.classList.add('visible');
+        })
+        .catch(() => {
           const li = document.createElement('li');
-          li.innerHTML = `<i class='fas fa-check-circle'></i> ${remedy}`;
+          li.innerHTML = `<i class='fas fa-exclamation-circle'></i> Remedy fetch error.`;
           remedyList.appendChild(li);
+          loading.style.display = 'none';
+          resultSection.classList.add('visible');
         });
+      })
+      .catch(() => {
+        diseaseName.textContent = "Prediction error";
+        confidence.textContent = "Confidence level: N/A";
+        remedyList.innerHTML = '';
+        const li = document.createElement('li');
+        li.innerHTML = `<i class='fas fa-exclamation-circle'></i> Prediction fetch error.`;
+        remedyList.appendChild(li);
         loading.style.display = 'none';
         resultSection.classList.add('visible');
-      }, 1200);
+      });
     });
   });
 </script>
