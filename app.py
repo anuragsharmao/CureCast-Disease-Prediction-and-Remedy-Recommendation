@@ -9,32 +9,30 @@ import numpy as np
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend requests
+CORS(app) 
 
-# Load datasets
 DATA_FILE = 'disease_data.csv'
 REMEDIES_FILE = 'remedies.json'
 
-# Sample stopwords (minimal list)
 STOPWORDS = {'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'you', 'your', 'yours', 'he', 'him', 'his', 'she', 'her', 'hers', 'it', 'its', 'they', 'them', 'their', 'theirs', 'have', 'has', 'had', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'must', 'can', 'a', 'an', 'the', 'and', 'but', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now'}
 
-# Global variables for model and symptoms
 model = None
 symptom_list = []
 label_encoder = None
 remedies = {}
-severity_colors = {'Common Cold': 'green', 'Flu': 'orange', 'Migraine': 'orange'}  # Simple color mapping
+severity_colors = {'Common Cold': 'green', 'Flu': 'orange', 'Migraine': 'orange'} 
 
 def train_model():
     global model, symptom_list, label_encoder
     if not os.path.exists(DATA_FILE):
         raise FileNotFoundError(f"{DATA_FILE} not found. Create it with sample data.")
     
-    df = pd.read_csv(DATA_FILE)
-    symptom_list = [col for col in df.columns if col != 'disease']
-    
+    df = pd.read_csv(DATA_FILE, on_bad_lines='skip')
+
+    symptom_list = [col for col in df.columns if col != 'prognosis']
+
     X = df[symptom_list].values
-    y = df['disease'].values
+    y = df['prognosis'].values
     
     label_encoder = LabelEncoder()
     y_encoded = label_encoder.fit_transform(y)
@@ -51,25 +49,20 @@ def load_remedies():
     with open(REMEDIES_FILE, 'r') as f:
         remedies = json.load(f)
 
-# Preprocess text and extract matched symptoms
 def preprocess_and_extract(symptoms_text):
-    # Lowercase, remove punctuation, strip, split
     text = re.sub(r'[^\w\s]', '', symptoms_text.lower().strip())
     words = [w for w in text.split() if w not in STOPWORDS and len(w) > 2]
     
-    # Flexible matching: partial and synonym (basic)
     vector = np.zeros(len(symptom_list))
     matched = []
     for i, symptom in enumerate(symptom_list):
         for word in words:
-            # Partial match (substring) and ignore case
             if symptom.lower() in word or word in symptom.lower():
                 vector[i] = 1
                 matched.append(symptom)
                 break
     return vector, matched
 
-# Train on startup
 train_model()
 load_remedies()
 
@@ -98,7 +91,7 @@ def predict():
     return jsonify({
         'disease': disease,
         'matched_symptoms': matched,
-        'confidence': float(model.predict_proba(vector.reshape(1, -1)).max())  # Optional explainability
+        'confidence': float(model.predict_proba(vector.reshape(1, -1)).max()) 
     })
 
 @app.route('/remedies', methods=['POST'])
